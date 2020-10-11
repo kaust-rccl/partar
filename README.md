@@ -1,7 +1,7 @@
-##Introduction
+## Introduction
 partar is a Python app using mpi4py to create multiple tarballs of large number of files in parallel.
 
-##Requirements:
+## Requirements:
 - Python3
 - mpi4py
 
@@ -12,10 +12,10 @@ Until then, please customize the python script at your discretion.
 
 To create synthetic benchmark (i.e a good number of files with decent data), a script is included "data_mpi.py".
 
-###Jobscript
+### Jobscript
 A sample slurm job script to launch the taring would look something like this:
 
-
+```
 #!/bin/bash 
 #SBATCH --partition=workq
 #SBATCH --ntasks=8
@@ -23,16 +23,16 @@ A sample slurm job script to launch the taring would look something like this:
 
 
 srun --hint=nomultithread -n 8 python partar.py
+```
 
-
-##Scaling:
+## Scaling:
 The scaling on the sythetic data looks promising.
-
+```
 	Num MPI procs		Time(min)
 	     4			226.9283333
 	     8			119.6616667
 	     16			58.8805
 	     32			32.3585
 	     64			8.833333333
-
+```
 
