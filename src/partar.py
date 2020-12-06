@@ -12,9 +12,10 @@ parser.add_argument('-o','--outdir', type=str, nargs=1,default=['.'],
                     help='Path to output directory')
 args = parser.parse_args()
 
-print(args)
 indir=args.indir[0]
 outdir=args.outdir[0]
+print("Reading CSV files from: ", indir)
+print("Writing tarballs in: ",outdir)
 
 comm=MPI.COMM_WORLD
 rank=comm.Get_rank()
@@ -22,7 +23,7 @@ nprocs=comm.Get_size()
 
 os.chdir(indir)
 if rank is 0: 
-    os.makedirs('tarfiles',exist_ok=True)
+    os.makedirs(outdir+'/tarfiles',exist_ok=True)
 
 req_r=comm.irecv(source=0,tag=100)
 
@@ -46,7 +47,7 @@ if (rank is 0):
 # After recv posted above is finished, put data in my_lst
 my_lst=req_r.wait()
 
-tarball='tarfiles/task%d.tar'%rank
+tarball=outdir+'/tarfiles/task%d.tar'%rank
 for i in range(len(my_lst)):
     out = sb.run(['tar','rvf',tarball,my_lst[i]],stdout=sb.PIPE,stderr=sb.PIPE)
     if str(out.stderr.decode("utf-8")) != "":
