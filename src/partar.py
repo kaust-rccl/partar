@@ -1,21 +1,33 @@
 #!/bin/env python
+import argparse
 from mpi4py import MPI
 import glob,subprocess as sb,os
 import numpy as np
 
 
+parser = argparse.ArgumentParser(description='Parallel Tarball.')
+parser.add_argument('-i','--indir', type=str, nargs=1,default=['data'],
+                    help='Path to input directory')
+parser.add_argument('-o','--outdir', type=str, nargs=1,default=['.'],
+                    help='Path to output directory')
+args = parser.parse_args()
+
+print(args)
+indir=args.indir[0]
+outdir=args.outdir[0]
+
 comm=MPI.COMM_WORLD
 rank=comm.Get_rank()
 nprocs=comm.Get_size()
 
-os.chdir('data')
+os.chdir(indir)
 if rank is 0: 
-    os.mkdir('tarfiles')
+    os.makedirs('tarfiles',exist_ok=True)
 
 req_r=comm.irecv(source=0,tag=100)
 
 if (rank is 0):
-    fname_lst=glob.glob('*.dat')
+    fname_lst=glob.glob('*.csv')
     div,rem=divmod(len(fname_lst),nprocs)
     # count: the size of each sub-task
     count = [div + 1 if p < rem else div for p in range(nprocs)]

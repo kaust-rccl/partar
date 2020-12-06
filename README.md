@@ -22,7 +22,7 @@ A sample slurm job script to launch the taring would look something like this:
 #SBATCH --time=04:00:00
 
 
-srun --hint=nomultithread -n 8 python partar.py
+srun --hint=nomultithread -n 8 python partar.py -i /path/to/input_dir -o /path/to/output_dir
 ```
 
 ## Scaling:
