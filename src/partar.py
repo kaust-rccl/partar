@@ -22,12 +22,12 @@ rank=comm.Get_rank()
 nprocs=comm.Get_size()
 
 os.chdir(indir)
-if rank is 0: 
+if rank == 0: 
     os.makedirs(outdir+'/tarfiles',exist_ok=True)
 
 req_r=comm.irecv(source=0,tag=100)
 
-if (rank is 0):
+if rank == 0:
     fname_lst=glob.glob('*.csv')
     div,rem=divmod(len(fname_lst),nprocs)
     # count: the size of each sub-task
